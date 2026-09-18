@@ -15,5 +15,19 @@ services:
       - quicksave-data:/app/data
     restart: unless-stopped
 
+  # Free local LLM (Llama) — only starts with: docker compose --profile ollama up
+  # Set OPENAI_BASE_URL=http://ollama:11434/v1 in .env, then:
+  #   docker compose exec ollama ollama pull llama3.1   (one-time model download)
+  ollama:
+    image: ollama/ollama:latest
+    profiles: ["ollama"]
+    container_name: quicksave-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+    restart: unless-stopped
+
 volumes:
   quicksave-data:
+  ollama-data:
