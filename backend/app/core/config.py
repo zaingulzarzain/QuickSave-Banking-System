@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     DEBUG: bool = False
 
     # SQLite by default = zero-setup demo. Swap for Postgres in production:
-    # postgresql+psycopg://user:password@host:5432/quicksave  (pip install psycopg[binary])
+    # postgresql+psycopg://user:password@host:5432/quicksave  (driver included)
     DATABASE_URL: str = "sqlite:///./quicksave.db"
 
     # --- Auth ---

@@ -17,4 +17,5 @@ RUN mkdir -p /app/data
 
 EXPOSE 8000
 
-CMD ["uvicorn", "backend.app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Shell form so $PORT (injected by Render/Railway) is honored; defaults to 8000 locally.
+CMD uvicorn backend.app.main:app --host 0.0.0.0 --port ${PORT:-8000}

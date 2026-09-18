@@ -1,0 +1,25 @@
+# Render Blueprint — one-click deploy of QuickSave (free tier friendly).
+# Click "Deploy to Render" in the README, or: dashboard.render.com → New → Blueprint → pick this repo.
+# Uses SQLite on the ephemeral disk: the app auto-seeds demo data, so it always
+# boots into a fresh, working demo. For persistent data, add a managed Postgres
+# and set DATABASE_URL (psycopg is already in requirements.txt).
+
+services:
+  - type: web
+    name: quicksave
+    runtime: docker
+    dockerfilePath: backend/Dockerfile
+    plan: free
+    autoDeploy: true
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: SEED_DEMO_DATA
+        value: true
+      - key: AI_ENABLED
+        value: true
+      - key: OPENAI_MODEL
+        value: gpt-4o-mini
+      - key: OPENAI_API_KEY
+        sync: false # set in the Render dashboard to enable the LLM brain (optional)
