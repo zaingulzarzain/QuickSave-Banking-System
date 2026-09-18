@@ -15,6 +15,12 @@ test: ## Run the test suite
 docker-up: ## Run with Docker Compose
 	docker compose up --build
 
+ollama-up: ## Run app + free local LLM (Ollama) with Docker
+	docker compose --profile ollama up --build
+
+ollama-pull: ## Download llama3.1 into the Ollama container (one-time)
+	docker compose exec ollama ollama pull llama3.1
+
 docker-down: ## Stop Docker Compose
 	docker compose down
 
