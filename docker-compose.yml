@@ -1,0 +1,19 @@
+services:
+  quicksave:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: quicksave
+    ports:
+      - "8000:8000"
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      DATABASE_URL: sqlite:////app/data/quicksave.db
+    volumes:
+      - quicksave-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  quicksave-data:

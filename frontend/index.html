@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QuickSave — Modern Banking, Reimagined</title>
+  <meta name="description" content="QuickSave Banking System: full-stack demo with FastAPI backend and AI financial assistant." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23059669'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'>Q</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'] },
+          colors: {
+            brand: { 50:'#ecfdf5',100:'#d1fae5',200:'#a7f3d0',300:'#6ee7b7',400:'#34d399',500:'#10b981',600:'#059669',700:'#047857',800:'#065f46',900:'#064e3b' },
+            ink: { 800:'#1e293b', 900:'#0f172a', 950:'#020617' }
+          },
+          boxShadow: { card: '0 1px 3px rgba(15,23,42,.08), 0 4px 16px rgba(15,23,42,.06)' }
+        }
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans antialiased">
+
+  <!-- ============================ AUTH SCREEN ============================ -->
+  <div id="auth-screen" class="hidden min-h-screen lg:grid lg:grid-cols-2">
+    <!-- Hero -->
+    <div class="relative hidden lg:flex flex-col justify-between overflow-hidden bg-ink-950 text-white p-12">
+      <div class="hero-glow"></div>
+      <div class="relative flex items-center gap-3">
+        <div class="logo-mark">Q</div>
+        <div>
+          <div class="text-xl font-800 font-extrabold tracking-tight">QuickSave</div>
+          <div class="text-xs text-emerald-300/80 tracking-widest uppercase">Banking System</div>
+        </div>
+      </div>
+      <div class="relative">
+        <h1 class="text-5xl font-extrabold leading-tight tracking-tight">
+          Banking that<br /><span class="text-gradient">thinks ahead.</span>
+        </h1>
+        <p class="mt-4 max-w-md text-slate-300">
+          Instant transfers, smart insights and an AI assistant that knows your money —
+          powered by a Python + FastAPI backend.
+        </p>
+        <div class="mt-8 grid grid-cols-3 gap-4 max-w-md">
+          <div class="hero-stat"><div class="hero-stat-num" data-count="12">0</div><div class="hero-stat-label">API modules</div></div>
+          <div class="hero-stat"><div class="hero-stat-num" data-count="14">0</div><div class="hero-stat-label">tests passing</div></div>
+          <div class="hero-stat"><div class="hero-stat-num" data-count="100">0</div><div class="hero-stat-label">$ welcome bonus</div></div>
+        </div>
+        <ul class="mt-8 space-y-3 text-sm text-slate-300">
+          <li class="flex items-center gap-3"><span class="check">✓</span> Atomic transfers with full audit trail</li>
+          <li class="flex items-center gap-3"><span class="check">✓</span> AI chat + spending insights (LLM powered)</li>
+          <li class="flex items-center gap-3"><span class="check">✓</span> Admin console with freeze controls</li>
+        </ul>
+      </div>
+      <div class="relative text-xs text-slate-500">Built with FastAPI · SQLAlchemy · Tailwind · Chart.js</div>
+    </div>
+
+    <!-- Forms -->
+    <div class="flex items-center justify-center p-6 sm:p-12">
+      <div class="w-full max-w-md">
+        <div class="lg:hidden flex items-center gap-3 mb-8">
+          <div class="logo-mark">Q</div>
+          <div class="text-xl font-extrabold">QuickSave</div>
+        </div>
+        <div class="bg-white rounded-2xl shadow-card p-8">
+          <div class="flex rounded-xl bg-slate-100 p-1 mb-6">
+            <button id="tab-login" class="auth-tab auth-tab-active" onclick="switchAuthTab('login')">Sign in</button>
+            <button id="tab-register" class="auth-tab" onclick="switchAuthTab('register')">Create account</button>
+          </div>
+
+          <form id="form-login" onsubmit="return doLogin(event)" class="space-y-4">
+            <div>
+              <label class="lbl">Email</label>
+              <input id="login-email" type="email" required class="inp" placeholder="demo@quicksave.io" autocomplete="email" />
+            </div>
+            <div>
+              <label class="lbl">Password</label>
+              <input id="login-password" type="password" required class="inp" placeholder="••••••••" autocomplete="current-password" />
+            </div>
+            <button class="btn-primary w-full">Sign in →</button>
+          </form>
+
+          <form id="form-register" onsubmit="return doRegister(event)" class="space-y-4 hidden">
+            <div>
+              <label class="lbl">Full name</label>
+              <input id="reg-name" required minlength="2" class="inp" placeholder="Jane Doe" autocomplete="name" />
+            </div>
+            <div>
+              <label class="lbl">Email</label>
+              <input id="reg-email" type="email" required class="inp" placeholder="jane@example.com" autocomplete="email" />
+            </div>
+            <div>
+              <label class="lbl">Password (min 6 chars)</label>
+              <input id="reg-password" type="password" required minlength="6" class="inp" placeholder="••••••••" autocomplete="new-password" />
+            </div>
+            <button class="btn-primary w-full">Create account + claim $100 🎉</button>
+          </form>
+
+          <div class="mt-6">
+            <div class="divider"><span>or try a demo account</span></div>
+            <div class="grid grid-cols-2 gap-3 mt-4">
+              <button onclick="demoLogin('demo@quicksave.io','demo1234')" class="btn-demo">
+                <span class="text-lg">👤</span>
+                <span><b>Customer</b><small>demo@quicksave.io</small></span>
+              </button>
+              <button onclick="demoLogin('admin@quicksave.io','admin1234')" class="btn-demo">
+                <span class="text-lg">🛡️</span>
+                <span><b>Admin</b><small>admin@quicksave.io</small></span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <p class="text-center text-xs text-slate-400 mt-6">
+          Demo project — no real money. API docs at <a href="/docs" class="text-brand-600 font-semibold">/docs</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================ APP SHELL ============================ -->
+  <div id="app" class="hidden min-h-screen">
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar">
+      <div class="flex items-center gap-3 px-6 h-16">
+        <div class="logo-mark">Q</div>
+        <div>
+          <div class="font-extrabold text-white tracking-tight">QuickSave</div>
+          <div class="text-[10px] text-emerald-300/70 tracking-widest uppercase">Banking</div>
+        </div>
+      </div>
+      <nav class="px-3 space-y-1 mt-2" id="nav">
+        <a href="#/dashboard" data-route="dashboard" class="nav-link">📊 <span>Dashboard</span></a>
+        <a href="#/accounts" data-route="accounts" class="nav-link">💳 <span>Accounts</span></a>
+        <a href="#/transactions" data-route="transactions" class="nav-link">🧾 <span>Transactions</span></a>
+        <a href="#/transfer" data-route="transfer" class="nav-link">💸 <span>Transfer</span></a>
+        <a href="#/insights" data-route="insights" class="nav-link">✨ <span>AI Insights</span></a>
+        <a href="#/admin" data-route="admin" id="nav-admin" class="nav-link hidden">🛡️ <span>Admin</span></a>
+      </nav>
+      <div class="mt-auto p-4">
+        <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+          <div class="text-xs text-slate-300 mb-1">Need help?</div>
+          <button onclick="toggleChat(true)" class="text-sm font-semibold text-emerald-300 hover:text-emerald-200">✨ Ask QuickSave AI →</button>
+        </div>
+        <div class="flex items-center gap-3 mt-4 px-2">
+          <div id="user-avatar" class="avatar">?</div>
+          <div class="min-w-0 flex-1">
+            <div id="user-name" class="text-sm font-semibold text-white truncate">—</div>
+            <div id="user-email" class="text-xs text-slate-400 truncate">—</div>
+          </div>
+          <button onclick="logout()" title="Sign out" class="text-slate-400 hover:text-white text-lg">⏻</button>
+        </div>
+      </div>
+    </aside>
+    <div id="sidebar-backdrop" class="sidebar-backdrop" onclick="toggleSidebar(false)"></div>
+
+    <!-- Main -->
+    <div class="lg:pl-[260px] min-h-screen flex flex-col">
+      <header class="sticky top-0 z-20 h-16 bg-white/80 backdrop-blur border-b border-slate-200 flex items-center gap-3 px-4 sm:px-8">
+        <button class="lg:hidden text-2xl" onclick="toggleSidebar(true)">☰</button>
+        <h1 id="page-title" class="text-lg sm:text-xl font-bold tracking-tight">Dashboard</h1>
+        <div class="ml-auto flex items-center gap-2">
+          <span id="ai-badge" class="badge" title="AI engine status">✨ AI: …</span>
+          <a href="/docs" target="_blank" class="badge badge-link hidden sm:inline-flex" title="Interactive API docs">📄 API</a>
+        </div>
+      </header>
+      <main id="view" class="flex-1 p-4 sm:p-8 max-w-6xl w-full mx-auto"></main>
+      <footer class="text-center text-xs text-slate-400 pb-6">QuickSave demo · FastAPI + AI · No real money</footer>
+    </div>
+  </div>
+
+  <!-- ============================ AI CHAT WIDGET ============================ -->
+  <button id="ai-fab" onclick="toggleChat()" class="hidden" title="Chat with QuickSave AI">✨</button>
+  <div id="ai-panel" class="hidden">
+    <div class="ai-header">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center text-white font-bold">✨</div>
+        <div>
+          <div class="font-bold text-sm">QuickSave AI</div>
+          <div id="ai-engine" class="text-[11px] text-emerald-100/80">online</div>
+        </div>
+      </div>
+      <button onclick="toggleChat(false)" class="text-white/70 hover:text-white text-xl leading-none">×</button>
+    </div>
+    <div id="ai-messages" class="ai-messages"></div>
+    <div id="ai-chips" class="ai-chips"></div>
+    <form onsubmit="return sendChat(event)" class="ai-input">
+      <input id="ai-text" placeholder="Ask about your money…" autocomplete="off" maxlength="500" />
+      <button id="ai-send" title="Send">➤</button>
+    </form>
+  </div>
+
+  <!-- Modal + toasts -->
+  <div id="modal-root"></div>
+  <div id="toast-root"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
