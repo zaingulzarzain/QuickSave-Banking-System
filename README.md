@@ -42,6 +42,26 @@ Open **http://localhost:8000** → the app seeds itself with demo data on first 
 docker compose up --build
 ```
 
+### Option C — Deploy a public live demo (free, ~5 min)
+
+Perfect for your Upwork portfolio — clients click a link, no install needed.
+
+**Render** (easiest — one click):
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/zaingulzarzain/QuickSave-Banking-System)
+
+1. Click the button → sign in with GitHub → pick this repo → **Deploy**
+2. Wait ~3–5 min for the first build → you get `https://quicksave-xxxx.onrender.com`
+3. (Optional) add `OPENAI_API_KEY` in the Render dashboard → Environment, to enable the LLM brain
+
+**Railway** (alternative):
+
+1. [railway.app](https://railway.app) → **New Project → Deploy from GitHub repo** → pick this repo
+2. Railway auto-detects the `Dockerfile` and deploys; open **Settings → Networking → Generate Domain**
+3. (Optional) **+ New → Database → PostgreSQL**, then set `DATABASE_URL` to `${{Postgres.DATABASE_URL}}` (driver included, just works)
+
+> **Free-tier notes:** Render's free service sleeps after inactivity — first visit takes ~30–60s to wake up. The demo uses SQLite, so data resets on redeploy and the app **auto-seeds a fresh demo** every time — ideal for client trials. For persistence, attach managed Postgres and set `DATABASE_URL`.
+
 ### Demo accounts
 
 | Role | Email | Password | Notes |
