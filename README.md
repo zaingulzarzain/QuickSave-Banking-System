@@ -1,6 +1,6 @@
 # 🏦 QuickSave Banking System
 
-> A full-stack demo banking platform — **Python + FastAPI backend** with an **AI financial assistant**,
+> A full stack demo banking platform — **Python + FastAPI backend** with an **AI financial assistant**,
 > atomic transfers, and a polished single-page web app. Runs in one command, no API keys required.
 
 [![CI](https://github.com/zaingulzarzain/QuickSave-Banking-System/actions/workflows/ci.yml/badge.svg)](https://github.com/zaingulzarzain/QuickSave-Banking-System/actions/workflows/ci.yml)
