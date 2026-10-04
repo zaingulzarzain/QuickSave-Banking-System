@@ -216,4 +216,4 @@ admin RBAC + freeze enforcement, AI chat/insights/categorization.
 
 ⭐ Available for freelance projects — if you like this build, let's talk on Upwork.
 
-*Like this project? A star helps clients find it.*
+
