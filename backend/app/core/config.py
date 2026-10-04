@@ -16,7 +16,18 @@ class Settings(BaseSettings):
 
     # SQLite by default = zero-setup demo. Swap for Postgres in production:
     # postgresql+psycopg://user:password@host:5432/quicksave  (driver included)
+    # We auto-normalize postgres:// → postgresql+psycopg:// for Render/Railway compatibility.
     DATABASE_URL: str = "sqlite:///./quicksave.db"
+
+    @property
+    def database_url_normalized(self) -> str:
+        url = self.DATABASE_URL.strip()
+        # Render/Railway often give postgres:// which SQLAlchemy 2.0 rejects
+        if url.startswith("postgres://"):
+            url = url.replace("postgres://", "postgresql+psycopg://", 1)
+        elif url.startswith("postgresql://") and "+psycopg" not in url:
+            url = url.replace("postgresql://", "postgresql+psycopg://", 1)
+        return url
 
     # --- Auth ---
     SECRET_KEY: str = "dev-secret-key-change-me-in-production"
